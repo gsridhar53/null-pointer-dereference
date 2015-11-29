@@ -14,7 +14,6 @@ package PAVpointerAnalysisPackage;
 
 import java.io.*;
 import java.util.*;
-
 import com.ibm.wala.classLoader.CallSiteReference;
 import com.ibm.wala.core.tests.callGraph.CallGraphTestUtil;
 import com.ibm.wala.ipa.callgraph.AnalysisCache;
