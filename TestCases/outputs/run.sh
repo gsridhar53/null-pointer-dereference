@@ -16,7 +16,7 @@
 # The command will be present under the 'Command line' column
 #
 # The index of the testcases are taken in the variable ALLTESTS. Change the array to add more testcases
-# If the 5th argument for the analysis is given as "join", the analysis outputs the JOIN OUTPUT. If anything other than "join" is specified, including "", TABLE OUTPUT will be generated.
+# If the 5th argument for the analysis is given as "join", the analysis outputs the JOIN OUTPUT. If "table" is specified, TABLE OUTPUT will be generated. If "nullDereference" is specified, output will be the list of instructions which MAY dereference NULL in the program.
 #
 
 allTests="1 2 3 4 5 6 7 8 9 10"
@@ -28,14 +28,18 @@ else
 	cur_tests=$allTests
 fi
 
-for type in table join
+for type in table join nullDereference
 do
 	if [ "$type" = "join" ]
-		then
-			file=JoinOutput
-		else
-			file=TableOutput
-		fi
+	then
+		file=JoinOutput
+	elif [ "$type" = "table" ]
+	then
+		file=TableOutput
+	elif [ "$type" = "nullDereference" ]
+	then
+		file=NullDereferenceInst
+	fi
 
 	echo "Checking $file"
 
@@ -56,5 +60,5 @@ do
 		fi
 	done
 
-	printf "\n"
+	printf "\n";
 done

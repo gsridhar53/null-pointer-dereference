@@ -109,8 +109,15 @@ public class SetUpAnalysis {
 	// will have key "ifTest"
 	HashMap<String, ArrayList<callSiteData>> mapToCallSiteData = new HashMap<String, ArrayList<callSiteData>>();
 
+	ArrayList<String> nullDereferenceInst = new ArrayList<String>();
+
+	private boolean displayAnalysisOutput;
+
 	// FLAG to display either JOIN output or TABLE output
 	public static boolean displayJoinedOutput;
+
+	// FLAG to display the instructions which MAYBE possible null-dereferences
+	private boolean displayNullDereferenceInst;
 
 	// START: NO CHANGE REGION
 	private AnalysisScope scope; // scope defines the set of files to be
@@ -123,15 +130,25 @@ public class SetUpAnalysis {
 	private CallGraphBuilder builder; // Builder object for the call graph
 	private CallGraph cg; // Call graph for the program
 
-	public SetUpAnalysis(String classpath, String mainClass, String analysisClass, String analysisMethod, String join) {
+	public SetUpAnalysis(String classpath, String mainClass, String analysisClass, String analysisMethod,
+			String output) {
 		this.classpath = classpath;
 		this.mainClass = mainClass;
 		this.analysisClass = analysisClass;
 		this.analysisMethod = analysisMethod;
-		if (join.equals("join") == true)
+
+		if (output.equals("join") == true) {
+			displayAnalysisOutput = true;
 			displayJoinedOutput = true;
-		else
+			displayNullDereferenceInst = false;
+		} else if (output.equals("table") == true) {
+			displayAnalysisOutput = true;
 			displayJoinedOutput = false;
+			displayNullDereferenceInst = false;
+		} else if (output.equals("nullDereference") == true) {
+			displayAnalysisOutput = false;
+			displayNullDereferenceInst = true;
+		}
 	}
 
 	/**
@@ -188,7 +205,7 @@ public class SetUpAnalysis {
 		// TODO Initialization flags for the analysis
 		// Initialization of flags required for the run of the analysis
 		boolean printToFile = false;
-		String outputFile = "test10join.txt";
+		String outputFile = "Test7null.txt";
 
 		// If set, write the output generated to a file
 		if (printToFile == true) {
@@ -473,15 +490,21 @@ public class SetUpAnalysis {
 			workingList.remove(0);
 		}
 
-		// Output of the ENTIRE ANALYSIS
-		displayOutput();
-
 		return;
 	}
 
 	// Display the output of the ENTIRE ANALYSIS
 	// TODO Not CHECKED
-	public void displayOutput() {
+	public void displayAnalysisOutput() {
+
+		if (displayNullDereferenceInst == true) {
+			for (String str : nullDereferenceInst) {
+				System.out.println(str);
+			}
+		}
+
+		if (displayAnalysisOutput == false)
+			return;
 
 		for (Map.Entry<String, ArrayList<String>> entry : programPoints.entrySet()) {
 			String method = entry.getKey();
@@ -582,14 +605,36 @@ public class SetUpAnalysis {
 					// continue;
 					// }
 					// System.out.println(inst);
+
 					// Check if library methods are being called
 					CallSiteReference csr = ((SSAInvokeInstruction) inst).getCallSite();
 					String signature = csr.getDeclaredTarget().getSignature();
 					String[] sigString = signature.split("[.]");
 					String targetMethodName = sigString[2].split("[(]")[0];
 					String className = "L" + sigString[0] + "/" + sigString[1];
-					if (!hashGlobalMethods.containsKey(className + targetMethodName)) {
+					if (hashGlobalMethods.containsKey(className + targetMethodName) == false) {
 						propagate = true;
+
+						// if (displayNullDereferenceInst == false)
+						// continue;
+
+						// If the library functions are called with possibly
+						// NULL, print that instruction
+						int param1 = inst.getUse(0);
+						String paramStr = Integer.toString(param1);
+
+						//
+						if (propagatedValue.get(paramStr) == null)
+							continue;
+
+						if (propagatedValue.get(paramStr).contains("null") == true) {
+							String BBNum = pPoint.split("[.]")[2];
+							String str = methodName + ": BB" + BBNum + ":\n" + inst.toString() + "\n";
+							if (nullDereferenceInst.contains(str) == false)
+								nullDereferenceInst.add(str);
+							// System.out.println(inst);
+						}
+
 						continue;
 					}
 					ISSABasicBlock succ = succBB.iterator().next();
@@ -727,6 +772,15 @@ public class SetUpAnalysis {
 			}
 		}
 
+		if (propagatedValue.get(varLEFT).contains("null") == true) {
+			String methodName = pPoint.split("[.]")[0];
+			String BBNum = pPoint.split("[.]")[2];
+			String str = methodName + ": BB" + BBNum + ":\n" + inst.toString() + "\n";
+			if (nullDereferenceInst.contains(str) == false)
+				nullDereferenceInst.add(str);
+			// System.out.println(inst);
+		}
+
 		return true;
 		// System.out.println("=====================");
 	}
@@ -791,6 +845,15 @@ public class SetUpAnalysis {
 				}
 			}
 			propagatedValue.put(varLEFT, pointsToFinal);
+		}
+
+		if (propagatedValue.get(varRIGHT).contains("null") == true) {
+			String methodName = pPoint.split("[.]")[0];
+			String BBNum = pPoint.split("[.]")[2];
+			String str = methodName + ": BB" + BBNum + ":\n" + inst.toString() + "\n";
+			if (nullDereferenceInst.contains(str) == false)
+				nullDereferenceInst.add(str);
+			// System.out.println(inst);
 		}
 
 		return true;
@@ -1317,6 +1380,28 @@ public class SetUpAnalysis {
 				if (changed)
 					workingList.add(succPP);
 			}
+		}
+
+		return;
+	}
+
+	public void printIR() {
+		System.out.println("\n\n");
+		Iterator<CGNode> nodes = cg.iterator();
+		CGNode target = null;
+		while (nodes.hasNext()) {
+			CGNode node = nodes.next();
+			String nodeInfo = node.toString();
+			if (nodeInfo.contains(analysisClass) && nodeInfo.contains(analysisMethod)) {
+				target = node;
+				break;
+			}
+		}
+		if (target != null) {
+			System.out.println("The IR of method " + target.getMethod().getSignature() + " is:");
+			System.out.println(target.getIR().toString());
+		} else {
+			System.out.println("The given method in the given class could not be found");
 		}
 
 		return;

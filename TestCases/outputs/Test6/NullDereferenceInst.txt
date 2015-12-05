@@ -1,0 +1,3 @@
+startTest: BB13:
+15 = invokevirtual < Application, Ljava/lang/Object, toString()Ljava/lang/String; > 10 @40 exception:14
+

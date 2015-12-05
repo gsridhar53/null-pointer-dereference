@@ -1,0 +1,3 @@
+calltest: BB5:
+11 = invokevirtual < Application, Ljava/lang/Object, toString()Ljava/lang/String; > 9 @12 exception:10
+

@@ -20,8 +20,8 @@ public class PAVPointerAnalysis {
 	private SetUpAnalysis setup;
 
 	public PAVPointerAnalysis(String classpath, String mainClass, String analysisClass, String analysisMethod,
-			String join) {
-		setup = new SetUpAnalysis(classpath, mainClass, analysisClass, analysisMethod, join);
+			String output) {
+		setup = new SetUpAnalysis(classpath, mainClass, analysisClass, analysisMethod, output);
 	}
 
 	public void runAnalysis() throws Exception {
@@ -39,6 +39,8 @@ public class PAVPointerAnalysis {
 		setup.generateCallGraph();
 		// END: NO CHANGE REGION
 
+		// setup.printIR();
+
 		// Initializes the things needed for the analysis
 		// FLAGS for writing to the file and to display the JOIN output is also
 		// in this method
@@ -55,6 +57,8 @@ public class PAVPointerAnalysis {
 		// The kildall iterator which analyzes the methods and stores the
 		// results
 		setup.kildall();
+
+		setup.displayAnalysisOutput();
 
 		return;
 	}
@@ -76,15 +80,24 @@ public class PAVPointerAnalysis {
 	 * 
 	 *            args[3]: Name of the method we want to analyze.
 	 * 
-	 *            args[4]: [OPTIONAL] If "join" is given as the 5th argument,
-	 *            then the analysis produces the JOINOUTPUT. Else, TABLEOUTPUT
-	 *            is generated.
+	 *            args[4]: [OPTIONAL]
+	 * 
+	 *            Default argument taken = "table"
+	 * 
+	 *            "table": Outputs the analysis result according to Iterative
+	 *            approach proposed by Sharir and Pneuli
+	 * 
+	 *            "join": Outputs the JOIN of all the columns produced by the
+	 *            Iterative approach
+	 * 
+	 *            "nullDereference": Outputs the statements in the program where
+	 *            POSSIBLE null dereference can occur
 	 * 
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
 
-		String classpath, mainClass, analysisClass, analysisMethod, join;
+		String classpath, mainClass, analysisClass, analysisMethod, output;
 
 		classpath = args[0];
 		mainClass = args[1];
@@ -92,12 +105,12 @@ public class PAVPointerAnalysis {
 		analysisMethod = args[3];
 
 		if (args.length == 5)
-			join = args[4];
+			output = args[4];
 		else
-			join = "table";
+			output = "table";
 
 		PAVPointerAnalysis pAnalysis = new PAVPointerAnalysis(classpath, mainClass, analysisClass, analysisMethod,
-				join);
+				output);
 
 		pAnalysis.runAnalysis();
 

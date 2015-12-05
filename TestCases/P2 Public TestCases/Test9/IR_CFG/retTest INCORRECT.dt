@@ -1,0 +1,14 @@
+digraph "DirectedGraph" {
+graph [concentrate = true];center=true;fontsize=6;node [ color=blue,shape="box"fontsize=6,fontcolor=black,fontname=Arial];edge [ color=black,fontsize=6,fontcolor=black,fontname=Arial]; 
+   "BB0 (en)\n\n" [ ]
+   "BB1\n2   conditional branch(eq, to iindex=5) v2,v4:#null\l           v5 = pi v2 for BB2, cause conditional branch(eq, to iindex=5) 2,4\l           v6 = pi v2 for BB3, cause conditional branch(eq, to iindex=5) 2,4\l" [ ]
+   "BB2\n4   return v4:#null                \l" [ ]
+   "BB3\n6   return v6                      \l" [ ]
+   "BB4 (ex)\n\n" [ ]
+ "BB0 (en)\n\n" -> "BB1\n2   conditional branch(eq, to iindex=5) v2,v4:#null\l           v5 = pi v2 for BB2, cause conditional branch(eq, to iindex=5) 2,4\l           v6 = pi v2 for BB3, cause conditional branch(eq, to iindex=5) 2,4\l" 
+ "BB1\n2   conditional branch(eq, to iindex=5) v2,v4:#null\l           v5 = pi v2 for BB2, cause conditional branch(eq, to iindex=5) 2,4\l           v6 = pi v2 for BB3, cause conditional branch(eq, to iindex=5) 2,4\l" -> "BB2\n4   return v4:#null                \l" 
+ "BB1\n2   conditional branch(eq, to iindex=5) v2,v4:#null\l           v5 = pi v2 for BB2, cause conditional branch(eq, to iindex=5) 2,4\l           v6 = pi v2 for BB3, cause conditional branch(eq, to iindex=5) 2,4\l" -> "BB3\n6   return v6                      \l" 
+ "BB2\n4   return v4:#null                \l" -> "BB4 (ex)\n\n" 
+ "BB3\n6   return v6                      \l" -> "BB4 (ex)\n\n" 
+
+}

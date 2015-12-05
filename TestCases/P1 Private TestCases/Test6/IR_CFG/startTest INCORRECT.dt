@@ -1,0 +1,39 @@
+digraph "DirectedGraph" {
+graph [concentrate = true];center=true;fontsize=6;node [ color=blue,shape="box"fontsize=6,fontcolor=black,fontname=Arial];edge [ color=black,fontsize=6,fontcolor=black,fontname=Arial]; 
+   "BB0 (en)\n\n" [ ]
+   "BB1\n1   v3 = getfield < Application, LTestCases/Test6, i, <Primordial,I> > v1\l" [ ]
+   "BB2\n3   v5 = binaryop(rem) v3 , v4:#2  \l" [ ]
+   "BB3\n5   conditional branch(ne, to iindex=9) v5,v6:#0\l" [ ]
+   "BB4\n8   goto (from iindex= 8 to iindex = 13)\l" [ ]
+   "BB5\n9   v8 = new <Application,LTestCases/PublicTests>@14\l" [ ]
+   "BB6\n11   invokespecial < Application, LTestCases/PublicTests, <init>()V > v8 @18 exception:v9\l" [ ]
+   "BB7\n" [ ]
+   "BB8\n           v10 = phi  v7:#null,v8\l15   conditional branch(ne, to iindex=21) v10,v7:#null\l           v11 = pi v10 for BB9, cause conditional branch(ne, to iindex=21) 10,7\l           v14 = pi v10 for BB12, cause conditional branch(ne, to iindex=21) 10,7\l" [ ]
+   "BB9\n16   v12 = new <Application,LTestCases/PublicTests>@26\l" [ ]
+   "BB10\n18   invokespecial < Application, LTestCases/PublicTests, <init>()V > v12 @30 exception:v13\l" [ ]
+   "BB11\n20   goto (from iindex= 20 to iindex = 23)\l" [ ]
+   "BB12\n" [ ]
+   "BB13\n           v15 = phi  v11,v14\l           v16 = phi  v12,v14\l24   v18 = invokevirtual < Application, Ljava/lang/Object, toString()Ljava/lang/String; > v15 @40 exception:v17\l" [ ]
+   "BB14\n27   v20 = invokevirtual < Application, Ljava/lang/Object, toString()Ljava/lang/String; > v16 @45 exception:v19\l" [ ]
+   "BB15\n29   return                        \l" [ ]
+   "BB16 (ex)\n\n" [ ]
+ "BB0 (en)\n\n" -> "BB1\n1   v3 = getfield < Application, LTestCases/Test6, i, <Primordial,I> > v1\l" 
+ "BB1\n1   v3 = getfield < Application, LTestCases/Test6, i, <Primordial,I> > v1\l" -> "BB2\n3   v5 = binaryop(rem) v3 , v4:#2  \l" 
+ "BB2\n3   v5 = binaryop(rem) v3 , v4:#2  \l" -> "BB3\n5   conditional branch(ne, to iindex=9) v5,v6:#0\l" 
+ "BB3\n5   conditional branch(ne, to iindex=9) v5,v6:#0\l" -> "BB4\n8   goto (from iindex= 8 to iindex = 13)\l" 
+ "BB3\n5   conditional branch(ne, to iindex=9) v5,v6:#0\l" -> "BB5\n9   v8 = new <Application,LTestCases/PublicTests>@14\l" 
+ "BB4\n8   goto (from iindex= 8 to iindex = 13)\l" -> "BB8\n           v10 = phi  v7:#null,v8\l15   conditional branch(ne, to iindex=21) v10,v7:#null\l           v11 = pi v10 for BB9, cause conditional branch(ne, to iindex=21) 10,7\l           v14 = pi v10 for BB12, cause conditional branch(ne, to iindex=21) 10,7\l" 
+ "BB5\n9   v8 = new <Application,LTestCases/PublicTests>@14\l" -> "BB6\n11   invokespecial < Application, LTestCases/PublicTests, <init>()V > v8 @18 exception:v9\l" 
+ "BB6\n11   invokespecial < Application, LTestCases/PublicTests, <init>()V > v8 @18 exception:v9\l" -> "BB7\n" 
+ "BB7\n" -> "BB8\n           v10 = phi  v7:#null,v8\l15   conditional branch(ne, to iindex=21) v10,v7:#null\l           v11 = pi v10 for BB9, cause conditional branch(ne, to iindex=21) 10,7\l           v14 = pi v10 for BB12, cause conditional branch(ne, to iindex=21) 10,7\l" 
+ "BB8\n           v10 = phi  v7:#null,v8\l15   conditional branch(ne, to iindex=21) v10,v7:#null\l           v11 = pi v10 for BB9, cause conditional branch(ne, to iindex=21) 10,7\l           v14 = pi v10 for BB12, cause conditional branch(ne, to iindex=21) 10,7\l" -> "BB9\n16   v12 = new <Application,LTestCases/PublicTests>@26\l" 
+ "BB8\n           v10 = phi  v7:#null,v8\l15   conditional branch(ne, to iindex=21) v10,v7:#null\l           v11 = pi v10 for BB9, cause conditional branch(ne, to iindex=21) 10,7\l           v14 = pi v10 for BB12, cause conditional branch(ne, to iindex=21) 10,7\l" -> "BB12\n" 
+ "BB9\n16   v12 = new <Application,LTestCases/PublicTests>@26\l" -> "BB10\n18   invokespecial < Application, LTestCases/PublicTests, <init>()V > v12 @30 exception:v13\l" 
+ "BB10\n18   invokespecial < Application, LTestCases/PublicTests, <init>()V > v12 @30 exception:v13\l" -> "BB11\n20   goto (from iindex= 20 to iindex = 23)\l" 
+ "BB11\n20   goto (from iindex= 20 to iindex = 23)\l" -> "BB13\n           v15 = phi  v11,v14\l           v16 = phi  v12,v14\l24   v18 = invokevirtual < Application, Ljava/lang/Object, toString()Ljava/lang/String; > v15 @40 exception:v17\l" 
+ "BB12\n" -> "BB13\n           v15 = phi  v11,v14\l           v16 = phi  v12,v14\l24   v18 = invokevirtual < Application, Ljava/lang/Object, toString()Ljava/lang/String; > v15 @40 exception:v17\l" 
+ "BB13\n           v15 = phi  v11,v14\l           v16 = phi  v12,v14\l24   v18 = invokevirtual < Application, Ljava/lang/Object, toString()Ljava/lang/String; > v15 @40 exception:v17\l" -> "BB14\n27   v20 = invokevirtual < Application, Ljava/lang/Object, toString()Ljava/lang/String; > v16 @45 exception:v19\l" 
+ "BB14\n27   v20 = invokevirtual < Application, Ljava/lang/Object, toString()Ljava/lang/String; > v16 @45 exception:v19\l" -> "BB15\n29   return                        \l" 
+ "BB15\n29   return                        \l" -> "BB16 (ex)\n\n" 
+
+}

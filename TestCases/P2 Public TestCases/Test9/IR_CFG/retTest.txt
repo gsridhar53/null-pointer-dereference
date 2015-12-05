@@ -1,0 +1,8 @@
+BB0
+BB1
+2   conditional branch(eq, to iindex=5) v2,v4:#null(line 14) {2=[t]}
+BB2
+4   return v4:#null                          (line 15)
+BB3
+6   return v2                                (line 18) {2=[t]}
+BB4
